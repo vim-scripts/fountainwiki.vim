@@ -1,0 +1,15 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=3945
+
+Plugin offers light wikification of Fountain files, plus indentation.
+
+Fountain syntax is the screenwriter's Markdown. Details: http://fountain.io
+
+CHARACTER NAMES, ## Section headers, and [[notes]] become automatic WikiWords, with no deviation from Fountain syntax whatsoever.  Simply press 'enter', and a new file opens for keeping notes.
+
+Emulates Vimwiki navigation and operation, and offers navigation and wikification of subordinate files of your choosing: plain text, markup syntax, etc. Or choose Vimwiki in order to use its search function and other features.
+
+Other helpful features for screenwriting: shift-enter for ALL CAPS carriage return, and Vimwiki-style header promotion/demotion.
+
+Fountain syntax file: (vimscript #3880)
+
+In the works for the next version: more independent wiki-like features for non-wiki subordinate files (i.e., wikification of text files), and all filetypes highlighted and clickable (for linking various text, PDF, MS Word, image references, etc), which will make the system useful for overall project management. Will also include support for a deviation syntax for more compact scripts (plays, comic books) that use the character/dialogue form, 'CHARACTER: Dialogue...', but otherwise emulates Fountain. Also, strengthening of pattern matches (I've already found some weaknesses) and, of course, some bug fixes.
