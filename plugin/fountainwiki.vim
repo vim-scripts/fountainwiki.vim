@@ -1,7 +1,7 @@
 " Vim plugin for Fountain screenplay files 
 " Plugin Name:	FountainWiki & Indentation
-" Version:	1.0 (early days)
-" Last Change:	2012 Feb 18
+" Version:	1.1 
+" Last Change:	2012 Feb 20
 " Reference: 	http://fountain.io/
 " Maintainer:	Carson Fire <carsonfire@gmail.com>
 "
@@ -9,8 +9,9 @@
 " ========
 " Plugin offers light wikification of Fountain files plus indentation.
 "
-" FountainWiki turns character names and section heads into automatic
-" WikiWords. Simply press 'enter', and a new file opens for keeping notes.
+" FountainWiki turns CHARACTER NAMES, ## section heads and [[comments]] into
+" automatic WikiWords. Simply press 'enter', and a new file opens for keeping
+" notes.
 "
 " This also creates a portal from Fountain files to powerful tools like
 " VimWiki, simply by defining the kind of notes you want to keep.
@@ -37,11 +38,11 @@
 "
 " Operation is simple, and intended to emulate existing behavior of popular
 " Vim plugins Voom and VimWiki. Instead of remembering a tricky shortcut, you
-" simply move your cursor to a character line or scene header and press
-" *enter*. A reference file opens as a sidebar to your script; either a new
-" virtual file, or pre-existing notes. Once you have saved that file, use
-" *tab* to move between the two files. If your reference filetype uses tab,
-" try ctrl+tab.
+" simply move your cursor to a character line or scene header, or a line that
+" is or contains a comment, and press *enter*. A wiki file opens as a
+" sidebar to your script; either a new virtual file, or pre-existing notes.
+" Once you have saved that file, use *tab* to move between the two files. If
+" your wiki filetype uses tab, try ctrl+tab.
 "
 " FOUNTAINWIKI OPTIONS - NAMING FILES 
 " -----------------------------------
@@ -59,8 +60,8 @@
 "
 " VimWiki - http://www.vim.org/scripts/script.php?script_id=2226
 "
-" Now your reference files become full wikis in their own right; type
-" WikiWords within the reference files in order to branch out to more notes in
+" Now your wiki files become full wikis in their own right; type
+" WikiWords within the wiki files in order to branch out to more notes in
 " the sidebar; hit 'backspace' to return, etc. Type :VimwikiSearch /pattern/
 " to search through all your notes!
 "
@@ -93,9 +94,18 @@
 " Special characters are simply stripped out. 'BJÖRN' becomes 'bjrn.fnx.txt'.
 " 'PAVLOV'S DOG' becomes 'pavlovsdog.fnx.txt'.
 "
+" FountainWiki does not truncate strings, unless it finds a natural linebreak;
+" too-long filenames can result, and will be treated by your system in
+" whatever way your system treats too-long filenames. 
+"
+"		let g:FountainWiki_Filename_Token = '.fnx'
+"
+" This is a token that can be inserted so that the files can be distinguished
+" from other files in the same directory.
+"
 " FOUNTAINWIKI OPTIONS - ENVIRONMENT
 " ----------------------------------
-" You can adjust the width the reference file opens:
+" You can adjust the width the wiki file opens:
 "
 "		let g:FountainWiki_Card_Width = 48
 "
@@ -163,6 +173,26 @@
 " 		let g:FountainWiki_Transition_Indent = '\t\t\t\t\t\t\t'
 " 		let g:FountainWiki_Centered_Indent = '\t\t\t'
 "
+" MAPPING FOUNTAINWIKI
+" ====================
+" There are a few commands you might wish to map.
+"
+" :FountainWikiCursorJump    Tabs between Fountain screenplay and wiki file.
+"                            This is already mapped to 'tab', but may be
+"                            overruled by other mappings.
+" :FountainWikiDisableAuto   Overrules default auto indentation.
+" :FountainWikiEnableAuto    Turns auto indentation on.
+" :FountainWikiIndent        On call indentation.
+" :FountainWikiCards         Create wiki file from text under cursor.
+" :FountainWikiHelp          Prints out a quick reminder of commands
+"
+" Default mapping is intended to emulate existing Vim plugins, particularly
+" Voom and VimWiki, and should only apply to Fountain files and the wiki
+" filetype you choose. The latter filetype will bring aboard its own mappings
+" and shortcuts, which is where most conflicts should arise.
+" 
+" TODO Some method of listing and/or indicating the existence of related wiki
+" files--without interfering with Fountain syntax.
 
 function FountainWikiIndent()
 	normal mvgg}mt
@@ -185,13 +215,21 @@ function FountainWikiCards()
 	lcd %:p:h
 	let g:Text = getline('.')
 	let g:Text = substitute(g:Text,"^\s*","","g")
-	let g:Character = substitute(g:Text,"\\U*","","g")
-	let g:Section = substitute(g:Text,"\\A*","","g")
+	if g:Text =~ "[["
+		let g:Comment = substitute(g:Text,".*\\[\\[\\(.*\\)\\]\\].*","\\1","g")
+		let g:Comment = substitute(g:Text,"\\A*","","g")
+		let g:Section = g:Comment
+		let g:Character = g:Comment
+	else
+		let g:Comment = ""
+		let g:Character = substitute(g:Text,"\\U*","","g")
+		let g:Section = substitute(g:Text,"\\A*","","g")
+	endif
 	if ( g:Character == g:Section || matchstr(g:Text,"^#") == "#" ) && g:Text != ""
 		if g:FountainWiki_Lowercase_Filename > 0
 			let g:Section = tolower(g:Section)
 		endif
-		exe 'vsplit '.g:Section.'.fnx.'.g:FountainWiki_Card_Extension
+		exe 'vsplit '.g:Section.g:FountainWiki_Filename_Token.'.'.g:FountainWiki_Card_Extension
 		if g:FountainWiki_Card_Right > 0
 			wincmd r
 		endif
@@ -204,14 +242,14 @@ function FountainWikiHelp()
 	echo "          Quick help for FountainWiki & Indentation"
 	echo "     ==================================================="
 	echo "     Auto indent              :w (save file)"
-	echo "     Disable auto indent      :FountainWikiDisableAuto"
-	echo "     Enable auto indent       :FountainWikiEnableAuto"
-	echo "     Manual indent            <c-cr> (ctrl-enter)"
+	echo "     Manual indent            ctrl-enter"
 	echo "     ----------------------------------------------------"
-	echo "     Open/create reference*   <cr> (enter)"
-	echo "     *FountainWikiWords: CHARACTER and # Section headings"
-	echo "     Close reference          <cr> anywhere else"
-	echo "     Switch focus             <tab> or <c-tab> (ctrl-tab)"
+	echo "     Open/create reference*   enter, on FountainWikiWords"
+	echo "     Close reference          enter, anywhere else"
+	echo "     FountainWikiWords        CHARACTER NAMES"
+	echo "                              ## Section headers"
+	echo "                              [[And notes]]"
+	echo "     Switch focus             <tab> (on either file)"
 	echo "     "
 	echo "     ----------------VOOM (IF INSTALLED)-----------------"
 	echo "     Outline                  :Voom markdown"
@@ -234,7 +272,7 @@ if !exists('FountainWiki_Textwidth')
 	let FountainWiki_Textwidth = 0
 endif
 if !exists('FountainWiki_Transition_Indent')
-	let FountainWiki_Transition_Indent = '\t\t\t\t\t\t\t'
+	let FountainWiki_Transition_Indent = '\t\t\t\t'
 endif
 if !exists('FountainWiki_Centered_Indent')
 	let FountainWiki_Centered_Indent = '\t\t\t'
@@ -251,14 +289,19 @@ endif
 if !exists('FountainWiki_Lowercase_Filename')
 	let FountainWiki_Lowercase_Filename = 1
 endif
+if !exists('FountainWiki_Filename_Token')
+	let FountainWiki_Filename_Token = '.fnx'
+endif
 if !exists('FountainWiki_Card_StayOpen')
 	let FountainWiki_Card_StayOpen = 0
 endif
 
+command FountainWikiCursorJump wincmd w
 command FountainWikiDisableAuto au! BufWrite *.fountain,*.spmd
 command FountainWikiEnableAuto au BufWrite *.fountain,*.spmd silent call FountainWikiIndent()
 command FountainWikiIndent silent call FountainWikiIndent()
 au BufWrite *.fountain,*.spmd FountainWikiIndent
+au BufWrite *.fountain,*.spmd FountainWikiCursorJump
 au BufRead *.fountain,*.spmd nnoremap <buffer> <c-cr> <esc>:FountainWikiIndent<cr>
 command FountainWikiCards silent call FountainWikiCards()
 au BufRead *.fountain,*.spmd nnoremap <buffer> <cr> <esc>:FountainWikiCards<cr>
@@ -266,6 +309,5 @@ command FountainWikiHelp call FountainWikiHelp()
 au BufRead *.fountain,*.spmd nnoremap <buffer> ? <esc>:FountainWikiHelp<cr>
 exe 'au BufRead *.fountain,*.spmd set tw='.g:FountainWiki_Textwidth
 exe 'au BufRead *.fountain,*.spmd set tabstop='.g:FountainWiki_Tabstop 
-au BufRead *.fountain,*.spmd,*.fnx.* nnoremap <buffer> <tab> <c-w>w
-au BufRead *.fountain,*.spmd,*.fnx.* nnoremap <buffer> <c-tab> <c-w>w
+exe 'au BufRead *.fountain,*.spmd,*'.g:FountainWiki_Filename_Token.g:FountainWiki_Card_Extension.' nnoremap <buffer> <tab> <c-w>w'
 
