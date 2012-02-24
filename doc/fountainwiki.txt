@@ -1,362 +1,232 @@
-*fountainwiki.txt*   for Vim version 7.3.   Last change: Feb 21 2012
+*fountainwiki.txt*        for Vim version 7.3        Last change: Feb 23 2012
 
-                                 FountainWiki
-                                 ''''''''''''
+                                  *Fountainwiki*
 
-Light wikification of Fountain screenplay files plus syntax & indentation.
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-Author: Carson Fire <carsonfire@gmail.com> 
-	http://twitter.com/carsonfire
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-CONTENTS                                *fountainwiki* *fountainwiki-contents* 
+Light wikification of Fountain screenplay files & indentation.
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Author:           Carson Fire <carsonfire@gmail.com> 
+	          http://twitter.com/carsonfire
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+Syntax reference: http://fountain.io/syntax 
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+CONTENTS                                                *Fountainwiki-contents* 
 
- 1. FountainWiki introduction             : |fountainwiki-introduction|
- 2. FountainWiki quick help               : |fountainwiki-quick-help|
- 3. Fountain syntax                       : |fountain-syntax|
-    FountainWikiWords                     : |fountainwikiwords|
- 4. FountainWiki and Vimwiki              : |fountainwiki-and-Vimwiki|
- 5. FountainWiki options                  : |fountainwiki-options|
- 6. Fountain indentation                  : |fountain-indentation|
- 7. Fountain indentation options          : |fountain-indentation-options|
- 8. FountainWiki commands                 : |fountainwiki-commands|
+ 1. Fountainwiki introduction             : |Fountainwiki-introduction|
+ 2. Fountain navigation                   : |Fountain-navigation|
+ 3. Fountainwiki words                    : |Fountainwiki-words|
+ 4. Fountain indentation                  : |Fountain-indentation|
+ 5. Fountainwiki options                  : |Fountainwiki-options|
+ 6. Fountain indentation options          : |Fountain-indentation-options|
+ 7. Fountainwiki commands                 : |Fountainwiki-commands|
+ 8. Fountainwiki shortcuts                : |Fountainwiki-shortcuts|
+ 9. Fountainwiki changes                  : |Fountainwiki-changes|
 
-==============================================================================
-1. FountainWiki introduction                       *fountainwiki-introduction* 
-==============================================================================
-The purpose of FountainWiki is to provide a note-taking facility that does not
+===============================================================================
+1 Fountainwiki introduction                         *Fountainwiki-introduction* 
+===============================================================================
+The purpose of Fountainwiki is to provide a note-taking facility that does not
 require any deviation from strict Fountain syntax.
 
-FountainWiki turns CHARACTER NAMES, ## Section headers and [[comments]] into
+Fountainwiki turns CHARACTER NAMES, ## Section headers and [[comments]] into
 WikiWords. Simply press 'enter', and a new file opens for keeping notes. These
 notes can be simple text files, or tap into other availabie file formats and
 systems.
 
-The indentation is not automatic as you type, but we include optional
-automatic indentation upon saving, or by hitting 'ctrl+enter'.
+The indentation is offered as an option instead of as a separate indentation
+file because it is non-standard (does not work like a normal indentation
+file). It is one of many functions designed to aid in Fountain screenwriting. 
 
-==============================================================================
-2. FountainWiki quick help                           *fountainwiki-quick-help* 
-==============================================================================
+===============================================================================
+2 Fountainwiki navigation                             *Fountainwiki-navigation*
+===============================================================================
+Fountainwiki navigation is modelled after the powerful Vim plugin, Vimwiki.
+This allows good workflow integration with Vimwiki, and in any case the
+commands and shortcuts are quick and relatively intuitive.
 
-	     Auto indent              :w (save file)
-	     Manual indent            ctrl-enter
-	     ----------------------------------------------------
-	     Open/create reference    enter, on FountainWikiWords
-	     Close reference          enter, anywhere else
-	     FountainWikiWords        CHARACTER NAMES
-	                              ## Section headers
-	                              [[And notes]]
-	     Switch focus             <tab> (on either file)
+Place your cursor on a link, press 'enter' to proceed; tap 'backspace' to
+return to the previous file. This applies to plain text files as well as
+Vimwiki.
 
-	     ---------------VIMWIKI (IF SELECTED)----------------
-             Must search from any note, not screenplay:
-             Search all notes         :VimwikiSearch pattern
-                                      :VWS patter
-             Reset wiki home          :ResetWiki
+While browsing files subordinate to the screenplay, the screenplay becomes the
+defacto home wiki. Tap 'backspace' twice from any of the subordinate files to
+return.
 
-	     ----------------VOOM (IF INSTALLED)-----------------
-	     Outline                  :Voom markdown
-	     Select section           <cr> (enter)
-	     Switch focus only        <tab>
-	     Move section up/down     <c-up/down> (ctrl-up/down)
+If using Vimwiki: since Vimwiki's navigation only applies to Vimwiki files,
+you _must_ tap 'backspace' twice to return to the screenplay.
 
-	     -------------------- NATIVE VIM---------------------
-	     Change entire character line to uppercase        gUU
-             Highlight all instances of CHARACTER      ?CHARACTER
+===============================================================================
+3 Fountainwiki words                                       *Fountainwiki-words*
+===============================================================================
+Fountainwiki Words are sections of Fountain syntax that Fountainwiki make
+clickable. Specifically, CHARACTER NAMES, ## Section headers, and [[notes]].
+True WikiWords -- conjoined capitalized words -- are not part of Fountain
+syntax, and are not made clickable through Fountainwiki, since they should not
+exist in your screenplay.
 
-==============================================================================
-3. Fountain syntax and FountainWikiWords                     *fountain-syntax*
-==============================================================================
-A review of Fountain syntax basics. Fountain provides for plain text
-screenwriting:
+There is no visible designation of what is clickable, apart from the existing
+syntax:
 
 ------------------------------------------------------------------------------
-Title:   Who's Minding Mindle?
-Author:  Frank X. Thwacksway
 
-### Mindle bucks up
+## Scene One - Easton goes west                            -- clickable
 
-INT. CLASSROOM - DAY
+EXT. COURTYARD - DAY                                       -- not clickable
 
-Students are doing what unruly students do: making noise, throwing trash,
-tormenting each other. Apparently there is no teacher in sight, but we haven't
-caught a glimpse of the teacher's desk, yet.
+A pleasant scene.                                          -- not clickable
 
-CUT TO:
+                EASTON                                     -- clickable
+        (absent-mindedly)                                  -- not clickable
+Where did that teapot go?                                  -- not clickable
 
-Peter Mindle, the teacher. The students have obviously worn him down. He sits,
-mute, depressed, unhappily resigned to his fate as we hear and catch sight of
-the chaos still erupting around him. He is finally startled out of his funk by
-a voice that he seems to think is coming from the desk in front of him. [[Maybe
-it's coming from the apple?]]
-
-WORM
-(shouting)
-You there! You're not going to stand for this, are you?
+He timidly steps forward. [[Easton's costume]]             -- clickable
 
 ------------------------------------------------------------------------------
-This small segment contains a few, but not all Fountain elements.
 
-                                                           *fountainwikiwords*
+Fountainwiki also wikifies subordinate files (except for wiki and viki files).
+These links are more direct; type a full filename, to a file of the same type,
+and this becomes clickable.
 
-FountainWikiWords are sections of Fountain syntax that FountainWiki make
-clickable. Specifically, character names, section headers, and notes. True
-WikiWords -- conjoined capitalized words -- are not part of Fountain syntax,
-and are not made clickable through FountainWiki, since they should not exist
-in your screenplay. Simply press 'enter'.
+If using plain text files, for example, your link would be something like
+'newfile.txt'. Put your cursor on it and click 'enter'. Tap 'backspace' to
+return. It doesn't matter if the filename is surrounded by brackets or syntax.
 
-You do not have to click precisely on the character name or a note, but
-somewhere on the line. It's just the same if you hit the indentation before
-the character name, or any dialogue on the same line as a note. In either
-case, the entire name or note on that line becomes the reference.
+If using wiki or viki, the subordinate files use their own default linking
+scheme, the standard WikiWord.
 
-CHARACTER NAMES
----------------
-Clickable character names appear in allcaps above dialogue. In the sample
-above, the only character who speaks is WORM; Peter Mindle must speak before
-he is clickable. Whether you call the character in the script PETER, MINDLE,
-or PETER MINDLE, that's entirely up to you; each variation will create a
-different file, so just be consistent!
-
-These character names can now be accessed from any point in the script they
-appear, and in any draft of the script in your screenplay directory. For this
-reason, you may want to separate different projects in different directories,
-otherwise, JACK the timid teacher in a comedy and JACK the tough cop in a
-gritty crime drama will lead to the same reference file.
-
-This may be seen as a weakness, but can also be a boon if working on many
-drafts of the same script, or writing a series based on a large cast of
-continuing characters.
-
-## Section headers and [[Notes]]
---------------------------------
-Fountain allows ATX-headers, which should be familiar to you if you have used
-Markdown or other similar light markup syntax. These headers begin with
-hashmarks denoting the header level, and sometimes end with hashmarks.  Notes
-are always between double brackets.
-
-In our sample above, the one section header is "Mindle bucks up"; the one note
-is "Maybe it's coming from the apple?" Both of these can be used for reference
-files.
-
-NOTE Section headers may be used simply to designate things like 'Act Three'
-or 'Scene 12'. This will produce predictibly non-unique reference files, and
-may conflict with other scripts in the same directory. We want to avoid
-suggesting methods of differentiating and changing things, as our purpose is
-to provide you with a reference tool that does not intrude on your work. But
-be aware of these potential conflicts. 
-
-NOTE In the case of a line with multiple notes, the last note is chosen.
-
-NOTE You can use multi-line notes for reference files, but you must click on
-the first line, and only the first line of text will be used.
-
-NOTE Although Fountain syntax doesn't address notes in section headers,
-FountainWiki will simply internalize a note as part of the header. So
-something like '# Section [[Notes]] Header' would be read as 'Section Notes
-Header'. 
-
-Everything else
----------------
-Click on any line that does not contain at least one designated
-FountainWikiWord, and nothing happens. If you use the sidebar option, the
-sidebar closes.
-
-==============================================================================
-4. FountainWiki and Vimwiki                             *fountain-and-vimwiki*
-==============================================================================
-FountainWikiWords create a hook into other file formats and systems that can be
-exploited in different ways. Consider these other formats and systems to be
-*hosts* for your reference files.
-
-Once you leave your Fountain screenplay, you gain the power of another system,
-but you are also technically at its mercy. Type :FountainWiki or :FW to return
-to your screenplay. Or type `<leader>fw`.
-
-We have provided an automatic hack for exploiting Vimwiki's search power, if
-you choose the 'wiki' filetype (see options). When you click from your
-screenplay into a wiki file, we reassign the primary Vimwiki directory to your
-screenplay directory. Then type ':VimwikiSearch pattern' or ':VWS patter' to
-search through all your screenplay notes. You will need to use ':WikiReset' if
-you want to go back to normal.
-
-==============================================================================
-5. FountainWiki options                                 *fountainwiki-options*
-==============================================================================
-To allow as much flexibility as possible, we make everything possible an
-option.
-
-This first one is awfully important, though. The way you keep notes relies on
-setting your filetype preference. When you click on a FountainWikiWord, this
-is the kind of file you will open, use, and save!
-
-	let g:FountainWiki_Card_Extension = 'txt'
-
-This is already set to 'txt' by default, because text files are ubiquitous.
-However, consider using a file type with more power: Markdown is a good
-choice, since Fountain is essentially a companion syntax. With Markdown, you
-get the same kind of headers, plus lists and more.
-
-However, the BEST choice would have to be Vimwiki or one of the other
-Vim-based wiki systems. Hook into the power of Vimwiki simply by setting that
-extension to 'wiki', and installing Vimwiki if you haven't already.
-
-Vimwiki - http://www.vim.org/scripts/script.php?script_id=2226
-
-There's always a catch: regardless what file type you choose now, you need to
-keep your notes together with your screenplay in the same directory. And if
-you decide to change filetypes in mid-stream, the fix is up to you. To keep
-your old notes, you would need to change the existing extensions, and do
-whatever you need to do to convert your text.
-
-Another decision you'll want to make early on is whether or not to allow
-uppercase letters in your filenames. Set to 0 to turn off lowercase-only
-filenames. Default setting is 1, lowercase-only.
-
-	let g:FountainWiki_Lowercase_Filename = 0
-
-Default behavior: a character named BILLY BOB creates a file named
-'billybob.txt'. Allow uppercase for 'BILLYBOB.txt'.
-
-Default behavior: section header '# Hero in Portland' becomes
-'heroinportland.txt'. Set to uppercase for 'HeroinPortland.txt'.
-
-Special characters are simply stripped out. 'BJÖRN' becomes 'bjrn.txt'.
-'PAVLOV'S DOG' becomes 'pavlovsdog.txt'.
-
-FountainWiki does not truncate strings, unless it finds a natural linebreak;
-too-long filenames can result, and will be treated by your system in whatever
-way your system treats too-long filenames. 
-
-	let g:FountainWiki_Filename_Token = '.fnx'
-
-This is a token that can be inserted so that the files can be distinguished
-from other files in the same directory. We have decided to set the default to
-''; it may even be considered deprecated, already.
-
-The rest of the options relate more to the writing environment, and can be
-changed any time without altering the files.
-
-	let g:FountainWiki_Card_Only = 1
-
-Default is '1'; this opens the wiki file fully, in place of your screenplay.
-Set to '0' for a sidebar instead.
-
-If you choose the sidebar, you can adjust its width and position:
-
-	let g:FountainWiki_Card_Width = 48
-	let g:FountainWiki_Card_Right = 1 " 0 for the left side, 1 for the right.
-
-FountainWiki closes other splits to keep things neat. Turn off this behavior
-by changing the following option to '0'. This can get messy!
-
-	let g:FountainWiki_Card_StayOpen = 1
-
-==============================================================================
-6. Fountain indentation                                 *Fountain-indentation*
-==============================================================================
+===============================================================================
+4 Fountain indentation                                   *Fountain-indentation*
+===============================================================================
 Indent Fountain files three different ways:
 
 	* Automatically, when saving the file.
 	* Hit 'enter' while in normal mode.
-	* Use the command :FountainWikiIndent
+	* Use the command :FnIndent
 
-Disable automatic indentation with the command:
+Settings for textwidth and tabstop are controlled independently from other
+filetypes in your Vim session. 
 
-	:FountainWikiDisableAuto
+===============================================================================
+5 Fountainwiki options                                   *Fountainwiki-options*
+===============================================================================
+Set the filetype you wish to use with your screenplay. Top three suggestions,
+and why: 'wiki' if you want the full power of Vimwiki (must have the plugin
+installed); 'markdown' for compatability (Fountain is based on Markdown); and
+'txt', because you can't go wrong with plain old text. Default is text:
+>
+	let g:Fountainwiki_Card_Extension = 'txt'
+<
+NOTE There is no built-in provision for updating old files to a new extension,
+if changed.
 
-To turn it back on, type :FountainWikiEnableAuto		
+Lowercase-only filenames (1), or uppercase OK (0). Default shown:
+>
+	let g:Fountainwiki_Lowercase_Filename = 1
+<
+NOTE If uppercase OK, CHARACTER NAME filenames will be allcaps.
 
-Our little demo script again, demonstrating the intended results:
+Filename token. Leave blank, this will not be used after all.
+>
+	let g:Fountainwiki_Filename_Token = ''
+<
+Open FountainwikiWord link full window (1), default shown. (0) results in
+less popular sidebar option.
+>
+	let g:Fountainwiki_Card_Only = 1
+<
+If you choose the sidebar, you can adjust its width and position: left side
+(0), right side (1). Third option set to (1) closes extra windows to keep
+things clean, (0) does nothing. Defaults shown.
+>
+	let g:Fountainwiki_Card_Width = 48
+	let g:Fountainwiki_Card_Right = 1 
+	let g:Fountainwiki_Card_StayOpen = 1
+<
+===============================================================================
+6 Fountain indentation options                   *Fountain-indentation-options*
+===============================================================================
+Auto-indent scheme: 0 = off, 1 = on (default).
+>
+	let g:Fountainwiki_Auto_Indent = 0
+<
+Textwidth for Fountain file buffers (default shown).
+>
+	let g:Fountainwiki_Textwidth = '0'
+<
+Tabstop for Fountain file buffers (default shown).
+>
+	let g:Fountainwiki_Tabstop = '8'
+<
+Tweak the number of tabs, or change to spaces (defaults shown):
+>
+	let g:Fountainwiki_Character_Indent = '\t\t'
+	let g:Fountainwiki_Parenthetical_Indent = '\t'
+	let g:Fountainwiki_Transition_Indent = '\t\t\t\t\t\t'
+	let g:Fountainwiki_Centered_Indent = '\t\t\t\t'
+<
+===============================================================================
+7 Fountainwiki commands                                 *Fountainwiki-commands*
+===============================================================================
 
-Dialogue is not indented, as there is no way to make it look screenplay-like
-without introducing line breaks. We find that line breaks can corrupt
-processing, so we recommend setting your text width to 0. Character names and
-parentheticals are tabbed, and we try to approximate the position of centered
-text and transitions.
+-------------------------------------------------------------------------------
+Fountainwiki commands:
+-------------------------------------------------------------------------------
+*:FnScreenplay*   Return to the current screenplay
+*:FnLink*         Follow link from screenplay
+*:FnSublink*      Follow link from subordinate file
+*:FnJump*         Tabs between files in sidebar mode
+*:FnReset*        Returns Vimwiki home to original state
 
-Since we are emulating the look of a screenplay, and there is no nesting
-involved, we set the tabstops fairly wide for Fountain buffers, but you can use
-spaces, instead. All of this can be adjusted in the options.
-
-NOTE We are experimenting with ways of protecting your title page block (the
-first lines up to the first blank line), but we haven't quite got it, yet.
-Uppercase-only lines in the title page block may become confused with
-CHARACTER NAMES.
-
-------------------------------------------------------------------------------
-Title:   Who's Minding Mindle?
-Author:  Frank X. Thwacksway
-
-### Mindle bucks up
-
-INT. CLASSROOM - DAY
-
-Students are doing what unruly students do: making noise, throwing trash,
-tormenting each other. Apparently there is no teacher in sight, but we haven't
-caught a glimpse of the teacher's desk, yet.
-
-                                                CUT TO:
-
-Peter Mindle, the teacher. The students have obviously worn him down. He sits,
-mute, depressed, unhappily resigned to his fate as we hear and catch sight of
-the chaos still erupting around him. He is finally startled out of his funk by
-a voice that he seems to think is coming from the desk in front of him. [[Maybe
-it's coming from the apple?]]
-
-                WORM
-        (shouting)
-You there! You're not going to stand for this, are you?
-
-------------------------------------------------------------------------------
-
-==============================================================================
-7. Fountain indentation options                 *fountain-indentation-options*
-==============================================================================
-To save time, when you see '0' and '1' listed as options, that's 'off' and
-'on', respectively.
-
-Turn off our auto indent scheme:
-
-	let g:FountainWiki_Auto_Indent = 0
-
-The width of tabs for Fountain file buffers.
-
-	let g:FountainWiki_Tabstop = '8'
-
-Use the following to tweak the number of tabs, or change to spaces:
-
-	let g:FountainWiki_Character_Indent = '\t\t'
-	let g:FountainWiki_Parenthetical_Indent = '\t'
-	let g:FountainWiki_Transition_Indent = '\t\t\t\t\t\t'
-	let g:FountainWiki_Centered_Indent = '\t\t\t\t'
-
-We recommend leaving textwidth '0' (off), but you can change it here. This
-should affect Fountain buffers only.
-
-	let g:FountainWiki_Textwidth = '0'
-
-==============================================================================
-8. FountainWiki commands                               *fountainwiki-commands*
-==============================================================================
-With any luck, you won't have to remember too many commands. Click 'enter' on a
-FountainWikiWord to open a wiki file. To return to your screenplay file, do one
-of the three:
-
-   :FountainWiki        :FW        <leader>fw
-
-This is the one command you might like to map to something you can type
-quickly, so you can bounce between your screenplay and reference files quickly.
-
-FountainWiki commands:
-
-:FountainWikiCards         Create wiki file from FountainWikiWord.
-:FountainWikiCursorJump    Tabs between files in sidebar mode.
-
+-------------------------------------------------------------------------------
 Fountain indentation commands:
+-------------------------------------------------------------------------------
+*:FnIndent*       Indent Fountain document
+*:FnOff*          Turn off auto indentation
+*:FnOn*           Turn on auto indentation
 
-:FountainWikiIndent        Run indentation.
-:FountainWikiDisableAuto   Turn off auto indentation.
-:FountainWikiEnableAuto    Turn on auto indentation.
+===============================================================================
+8 Fountainwiki shortcuts                               *Fountainwiki-shortcuts*
+===============================================================================
 
+-------------------------------------------------------------------------------
+Fountainwiki shortcuts (Fountain file only):
+-------------------------------------------------------------------------------
+<cr>                      Follow FountainwikiWord link
+<backspace>               Return to wiki home (if using Vimwiki)
+
+-------------------------------------------------------------------------------
+Fountainwiki shortcuts (Files subordinate to Fountain file):
+-------------------------------------------------------------------------------
+<cr>                      Follow filename link (extension match)
+<cr>                      Follow WikiWord link (if using Vimwiki)
+<backspace>               Return to previous file
+<backspace><backspace>    Return to screenplay
+
+-------------------------------------------------------------------------------
+Indentation shortcut (Fountain file only):
+-------------------------------------------------------------------------------
+<c-cr>                    Indent screenplay
+
+-------------------------------------------------------------------------------
+Editing/writing shortcuts (Fountain file only):
+-------------------------------------------------------------------------------
+<s-cr>                    ALL CAPS line (normal mode)
+<s-cr>                    ALL CAPS line, carriage return (indent mode)
+=                         Promote section header
+-                         Demote section header
+
+===============================================================================
+9 Fountainwiki changes                                  *Fountainwiki-changes*
+===============================================================================
+2012 Feb 24:
+* Cleaner innards, better internal notes.
+* More concise help file.
+* Commands shortened; all begin with 'Fn' for quick access.
+* Coordinated with Vimwiki navigation and functions.
+* Complimentary navigation scheme for other subordinate files.
+* Subordinate files wikified.
+* Vimwiki-like header adjustment.
+* Intuitive shortcut for ALLCAP LINES carriage return.
+* Better title page text block protection (indentation).
+
+-------------------------------------------------------------------------------
 vim:tw=78:ts=8:ft=help:norl:
