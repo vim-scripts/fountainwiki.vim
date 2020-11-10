@@ -1,6 +1,6 @@
-" Vim plugin for Fountain screenplay files 
+" Vim plugin for Fountain screenplay files
 " Plugin Name:	Fountainwiki & Indentation
-" Version:	1.3 
+" Version:	1.3
 " Last Change:	2012 Feb 24
 " Reference: 	http://fountain.io/
 " Maintainer:	Carson Fire <carsonfire@gmail.com>
@@ -30,7 +30,7 @@ if !exists('FountainWiki_Centered_Indent')
 	let FountainWiki_Centered_Indent = '\t\t\t\t'
 endif
 exe 'au FileType fountain,spmd setlocal tw='.g:FountainWiki_Textwidth
-exe 'au FileType fountain,spmd setlocal tabstop='.g:FountainWiki_Tabstop 
+exe 'au FileType fountain,spmd setlocal tabstop='.g:FountainWiki_Tabstop
 
 " Wiki settings
 if !exists('FountainWiki_Card_Extension')
@@ -61,7 +61,8 @@ endif
 
 function FountainWikiIndent()
 	" When triggered, this function indents an entire Fountain doc.
-	normal mvgg}mt
+	let position = winsaveview()
+	normal gg}mt
 	let g:Safety = "'t,$"
 	" We bookmark our current location, then bookmark the first blank
 	" line.
@@ -77,8 +78,7 @@ function FountainWikiIndent()
 	" Fix section headers mistaken for character names.
 	exe '%s/^\s*$//ge'
 	" Remove accidental tabs/spaces from otherwise blank lines.
-	normal 'v
-	" We return the user to the spot where he began.
+	call winrestview(position)
 endfunction
 
 function FountainHeaderDown()
@@ -162,7 +162,7 @@ function ScreenplayHome()
 	exe 'command! FW e '.g:FountainWiki_Home
 	exe 'command! FnScreenplay e '.g:FountainWiki_Home
 	" Command(s) for returning to the last screenplay doc, from anywhere.
-	if g:FountainWiki_Card_Extension != "wiki" && g:FountainWiki_Card_Extension != "viki" && g:FountainWiki_Card_Extension != "fountain" 
+	if g:FountainWiki_Card_Extension != "wiki" && g:FountainWiki_Card_Extension != "viki" && g:FountainWiki_Card_Extension != "fountain"
 		" We grant Vimwiki-like powers to text files
 		exe 'au BufRead,BufWrite,BufNewFile '.g:FountainWiki_Path.'/*.'.g:FountainWiki_Card_Extension.' nnoremap <buffer> <backspace> <c-o>'
 		exe 'au BufRead,BufWrite '.g:FountainWiki_Path.'/*.'.g:FountainWiki_Card_Extension.' map <buffer> <cr> <esc>:call SpecialLink()<cr>'
@@ -184,7 +184,7 @@ if g:FountainWiki_Card_Extension == "wiki"
 	if exists("g:wiki.path")
 		exe 'command! FnReset let g:wiki.path = "'.g:wiki.path.'"'
 	else
-		command! FnReset echo "No wiki reset required." 
+		command! FnReset echo "No wiki reset required."
 	endif
 	nnoremap <leader>ww <esc>:FnReset<cr>:VimwikiIndex<cr>
 	nnoremap <leader>wt <esc>:FnReset<cr>:VimwikiTabIndex<cr>
