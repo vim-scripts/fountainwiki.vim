@@ -61,7 +61,7 @@ endif
 
 function FountainWikiIndent()
 	" When triggered, this function indents an entire Fountain doc.
-        let save_pos = getcurpos()
+	let position = winsaveview()
 	normal gg}mt
 	let g:Safety = "'t,$"
 	" We bookmark our current location, then bookmark the first blank
@@ -78,8 +78,7 @@ function FountainWikiIndent()
 	" Fix section headers mistaken for character names.
 	exe '%s/^\s*$//ge'
 	" Remove accidental tabs/spaces from otherwise blank lines.
-	call setpos('.', save_pos)
-	" We return the user to the spot where he began.
+	call winrestview(position)
 endfunction
 
 function FountainHeaderDown()
